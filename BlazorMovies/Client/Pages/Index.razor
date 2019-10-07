@@ -1,0 +1,65 @@
+﻿@page "/"
+
+<p>Hola, @UtilidadesStrings.EnMayuscular(nombre)</p>
+
+<p>Vamos a sunar 2 + 2 @(2+2)</p>
+
+<button @onclick="@ManejarClick">
+    Presioname
+</button>
+
+<div>
+    <h3>Movies</h3>
+
+    @if (Movies == null)
+    {
+        <img src="https://wpamelia.com/wp-content/uploads/2018/11/ezgif-2-6d0b072c3d3f.gif" />
+        <text>Cargando...</text>
+    }
+    else
+    {        
+        @foreach (var movie in Movies)
+        {
+            <p>Title: <b>@movie.Title</b> </p>
+            <p>Publish Date: <b>@movie.PublishDate.ToString("dd/MM/yyyy")</b> </p>
+        }
+    }
+
+</div>
+
+@code {
+    string nombre = "Alfonso";
+
+    public Movie SpiderMan => GetMovie();
+    public List<Movie> Movies;
+
+    private static Movie GetMovie() => new Movie
+    {
+        Title = "Splider-Man Far From Home",
+        PublishDate = new DateTime(2019,7,2),
+    };
+
+    private static Movie GetMovie(string title, DateTime publishDate) => new Movie
+    {
+        Title = title,
+        PublishDate = publishDate,
+    };
+
+    private static IEnumerable<Movie> GetMovies()
+    {
+        return new Movie[]
+        {
+            GetMovie("Splider-Man Far From Home", new DateTime(2019,7,2)),
+            GetMovie("Mohana", new DateTime(2019,7,2)),
+            GetMovie("Inception", new DateTime(2019,7,2)),
+        };
+    }
+
+    private static void ManejarClick() => Console.WriteLine("Mandando click desde consola");
+
+    protected override async Task OnInitializedAsync()
+    {
+        await Task.Delay(3000);
+        Movies = GetMovies().ToList();
+    }
+}
