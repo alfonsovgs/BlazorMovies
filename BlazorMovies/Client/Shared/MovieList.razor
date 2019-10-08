@@ -1,0 +1,20 @@
+﻿
+@if (Movies == null)
+{
+    <img src="https://wpamelia.com/wp-content/uploads/2018/11/ezgif-2-6d0b072c3d3f.gif" />
+    <text>Cargando...</text>
+}
+else
+{
+    @foreach (var movie in Movies)
+    {
+        <MovieDetail Movie="movie"/>
+    }
+}
+
+@code {
+
+    [Parameter]
+    public List<Movie> Movies { get; set; }
+    
+}
