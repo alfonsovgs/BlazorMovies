@@ -1,0 +1,46 @@
+﻿@typeparam TItem
+
+@if (Collection == null)
+{
+    @if (Loading == null)
+    {
+        <text>Loading...</text>
+    }
+    else
+    {
+        @Loading
+    }
+}
+else if (Collection.Count == 0)
+{
+    @if (NoContent == null)
+    {
+        <text>There are no records to show...</text>
+    }
+    else
+    {
+        @NoContent
+    }
+}
+else
+{
+    foreach (var item in Collection)
+    {
+        @Item(item)
+    }
+}
+
+
+@code {
+    [Parameter]
+    public RenderFragment Loading { get; set; }
+
+    [Parameter]
+    public RenderFragment NoContent { get; set; }
+
+    [Parameter]
+    public RenderFragment<TItem> Item { get; set; }
+
+    [Parameter]
+    public List<TItem> Collection { get; set; }
+}
