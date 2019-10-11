@@ -1,5 +1,5 @@
 ﻿@using System.ComponentModel
-
+@inject JSRuntime js
 
     <input type="checkbox" @onchange="@(() => ShowButtons = !ShowButtons)"/>
     <input type="checkbox" @bind="ShowButtons"/>
@@ -17,10 +17,15 @@
 
     public bool ShowButtons { get; set; }
 
-    void DeleteMovie(Movie movie)
+    async Task DeleteMovie(Movie movie)
     {
-        Console.WriteLine($"A movie ({movie.Title}) has been deleted");
-        Movies.Remove(movie);
+        var isDeleted = await js.InvokeAsync<bool>("confirm", $"Do you want remove the {movie.Title} movie?");
+
+        if (isDeleted)
+        {
+            Console.WriteLine($"A movie ({movie.Title}) has been deleted");
+            Movies.Remove(movie);
+        }
     }
 
     protected override void OnInitialized()
