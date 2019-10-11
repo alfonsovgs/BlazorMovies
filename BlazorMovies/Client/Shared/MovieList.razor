@@ -1,5 +1,5 @@
 ﻿@using System.ComponentModel
-@inject JSRuntime js
+@inject IJSRuntime js
 
     <input type="checkbox" @onchange="@(() => ShowButtons = !ShowButtons)"/>
     <input type="checkbox" @bind="ShowButtons"/>
@@ -19,7 +19,7 @@
 
     async Task DeleteMovie(Movie movie)
     {
-        var isDeleted = await js.InvokeAsync<bool>("confirm", $"Do you want remove the {movie.Title} movie?");
+        var isDeleted = await js.Confirm($"Do you want remove the {movie.Title} movie?");
 
         if (isDeleted)
         {
