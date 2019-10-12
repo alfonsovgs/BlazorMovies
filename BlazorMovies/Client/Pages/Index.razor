@@ -1,5 +1,6 @@
 ﻿@page "/"
-@inject  IMovieRepository movieRepository
+@inject IMovieRepository movieRepository
+@using static BlazorMovies.Client.Shared.MainLayout
 
 <div>
     <h3>Movies</h3>
@@ -10,6 +11,8 @@
 
 @code {
     readonly string nombre = "Alfonso";
+
+    [CascadingParameter] protected AppState AppState { get; set; }
 
     public List<Movie> Movies;
 
