@@ -1,5 +1,5 @@
 ﻿@using System.ComponentModel
-@inject IJSRuntime js
+@inject IJSRuntime Js
 
     <input type="checkbox" @onchange="@(() => ShowButtons = !ShowButtons)"/>
     <input type="checkbox" @bind="ShowButtons"/>
@@ -10,22 +10,31 @@
         </Item>
     </GenericList>
 
+<Confirmation @ref="_confirmation" onConfirm="OnConfirm" onCancel="OnCancelConfirmation">
+    <p>Do you want delete movie?</p>
+</Confirmation>
+
 @code {
 
     [Parameter]
     public List<Movie> Movies { get; set; }
 
     public bool ShowButtons { get; set; }
+    
+    Movie _movieToDelete;
+    Confirmation _confirmation;
 
     async Task DeleteMovie(Movie movie)
     {
-        var isDeleted = await js.Confirm($"Do you want remove the {movie.Title} movie?");
+        //var isDeleted = await js.Confirm($"Do you want remove the {movie.Title} movie?");
 
-        if (isDeleted)
-        {
-            Console.WriteLine($"A movie ({movie.Title}) has been deleted");
-            Movies.Remove(movie);
-        }
+        //if (isDeleted)
+        //{
+        //    Console.WriteLine($"A movie ({movie.Title}) has been deleted");
+        //    Movies.Remove(movie);
+        //}
+        _movieToDelete = movie;
+        _confirmation.Show();
     }
 
     protected override void OnInitialized()
@@ -49,4 +58,16 @@
         return true;
     }
 
+
+    void OnConfirm()
+    {
+        Movies.Remove(_movieToDelete);
+        OnCancelConfirmation();
+    }
+
+    void OnCancelConfirmation()
+    {
+        _confirmation.Hidden();
+        _movieToDelete = null;
+    }
 }
