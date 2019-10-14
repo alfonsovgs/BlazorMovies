@@ -1,73 +1,27 @@
 ﻿@using System.ComponentModel
 @inject IJSRuntime Js
 
-    <input type="checkbox" @onchange="@(() => ShowButtons = !ShowButtons)"/>
-    <input type="checkbox" @bind="ShowButtons"/>
-
-    <GenericList Collection="Movies">
-        <Item>
-            <MovieDetail Movie="context" DeleteMovie="DeleteMovie" ShowButtons="ShowButtons" />
-        </Item>
-    </GenericList>
-
-<Confirmation @ref="_confirmation" onConfirm="OnConfirm" onCancel="OnCancelConfirmation">
-    <p>Do you want delete movie?</p>
-</Confirmation>
+    <div style="display: flex; flex-wrap: wrap; align-items: center;">
+        <GenericList Collection="Movies">
+            <Item>
+                <MovieDetail Movie="context" DeleteMovie="DeleteMovie" />
+            </Item>
+        </GenericList>
+    </div>
 
 @code {
 
     [Parameter]
     public List<Movie> Movies { get; set; }
 
-    public bool ShowButtons { get; set; }
-    
-    Movie _movieToDelete;
-    Confirmation _confirmation;
-
     async Task DeleteMovie(Movie movie)
     {
-        //var isDeleted = await js.Confirm($"Do you want remove the {movie.Title} movie?");
+        var isDeleted = await Js.Confirm($"Do you want remove the {movie.Title} movie?");
 
-        //if (isDeleted)
-        //{
-        //    Console.WriteLine($"A movie ({movie.Title}) has been deleted");
-        //    Movies.Remove(movie);
-        //}
-        _movieToDelete = movie;
-        _confirmation.Show();
-    }
-
-    protected override void OnInitialized()
-    {
-        Console.WriteLine($"OnInitialized - Movies count: {Movies.Count}");
-    }
-
-    protected override void OnParametersSet()
-    {
-        Console.WriteLine($"OnParametersSet - Movies count: {Movies.Count}");
-    }
-
-    protected override void OnAfterRender(bool firstRender)
-    {
-        Console.WriteLine($"OnAfterRender : - Movies count: {Movies.Count}");
-    }
-
-    protected override bool ShouldRender()
-    {
-        Console.WriteLine("ShouldRender");
-        return true;
-    }
-
-
-    void OnConfirm()
-    {
-        Movies.Remove(_movieToDelete);
-        OnCancelConfirmation();
-    }
-
-    void OnCancelConfirmation()
-    {
-        _confirmation.Hidden();
-        _movieToDelete = null;
+        if (isDeleted)
+        {
+            Console.WriteLine($"A movie ({movie.Title}) has been deleted");
+            Movies.Remove(movie);
+        }
     }
 }

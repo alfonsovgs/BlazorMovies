@@ -5,30 +5,14 @@
 <div>
     <h3>Movies</h3>
     <MovieList Movies="Movies" />
-    <br />
-    <button @onclick="AddMovie">Add Movie</button>
 </div>
 
 @code {
-    readonly string nombre = "Alfonso";
-
-    [CascadingParameter] protected AppState AppState { get; set; }
 
     public List<Movie> Movies;
 
     protected override void OnInitialized()
     {
         Movies = movieRepository.GetMovies();
-    }
-
-    private static Movie GetMovie(string title, DateTime publishDate) => new Movie
-    {
-        Title = title,
-        PublishDate = publishDate,
-    };
-
-    private void AddMovie()
-    {
-        Movies.Add(GetMovie("New movie", DateTime.Now));
     }
 }

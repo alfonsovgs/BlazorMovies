@@ -8,5 +8,15 @@ namespace BlazorMovies.Shared.Entities
     {
         public string Title { get; set; }
         public DateTime PublishDate { get; set; }
-    }
+        public string Poster { get; set; }
+
+        public string SmallTitle
+        {
+            get
+            {
+                if (Title?.Length > 60) return Title.Substring(0, 60) + "...";
+                return Title;
+            }
+        }
+}
 }
